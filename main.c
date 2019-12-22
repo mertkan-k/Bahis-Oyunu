@@ -84,12 +84,12 @@ main() {
 			if ( strcmp(komut, "yardim")==0 ) {printHelp();}
 			else if ( strcmp(komut, "araba")==0 ){
 				printf("Arabanin ismini giriniz.\n");
-				char arabaIsmi[1]; int arabaSec=-1;
-				//scanf("%s",&arabaIsmi);
+				char arabaIsmi[1+1]; int arabaSec=-1;
+				// scanf("%c",&arabaIsmi);
 				gets(arabaIsmi);
 				//Find car Name in list
 				for (i=0; i<__CAR_COUNT; i++){
-					if ( carNames[i] == *arabaIsmi ){//Normalde pointer pek bilmiyorum ama verdiði warninden yola çýkarak doðrusunu buldum.
+					if ( carNames[i] == *arabaIsmi ){
 						arabaSec=i+1;
 						break;
 					}
@@ -102,10 +102,8 @@ main() {
 			}
 			else if ( strcmp(komut, "para")==0 ){
 				printf("Yatirilacak para miktarini giriniz.(Max: %d$)\n", myMoney);
-				int yatirPara; char yatirParaChr[10];
-				// scanf("%d", &yatirPara);
-				gets(yatirParaChr);
-				yatirPara = my_atoi(yatirParaChr);
+				int yatirPara;
+				scanf("%d", &yatirPara);
 				if ( yatirPara<=myMoney && yatirPara>=0 ){
 					yatirilanPara=yatirPara;
 				}
@@ -201,6 +199,12 @@ int startGame(int finish_num)
 	
 	int localizations[__CAR_COUNT]; int random = 0; int i; int j;
 	
+	for (size_t i = 0; i < __CAR_COUNT; i++)
+	{
+		localizations[i] = 0;
+	}
+	
+
 	while (true){
 		
 		sleep(1);
@@ -266,27 +270,3 @@ double precisioner(double numb, int pre){ return floor(numb*pow(10, pre))/pow(10
 
 int randomRange(int min, int max){ return min+(rand()%(max-min)); }
 
-int my_atoi(const char* snum)//https://stackoverflow.com/questions/7021725/how-to-convert-a-string-to-integer-in-c
-{
-	int idx, strIdx = 0, accum = 0, numIsNeg = 0;
-	const unsigned int NUMLEN = (int)strlen(snum);
-
-	/* Check if negative number and flag it. */
-	if(snum[0] == 0x2d)
-		numIsNeg = 1;
-
-	for(idx = NUMLEN - 1; idx >= 0; idx--)
-	{
-		/* Only process numbers from 0 through 9. */
-		if(snum[strIdx] >= 0x30 && snum[strIdx] <= 0x39)
-			accum += (snum[strIdx] - 0x30) * pow(10, idx);
-
-		strIdx++;
-	}
-
-	/* Check flag to see if originally passed -ve number and convert result if so. */
-	if(!numIsNeg)
-		return accum;
-	else
-		return accum * -1;
-}
